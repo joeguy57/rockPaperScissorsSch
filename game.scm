@@ -111,7 +111,7 @@
                      (else (display "Enter ROCK PAPER SCISSORS: ")
                             (game ;; Recursively calls the the input and computer Move along with previous games score
                                   (gameCheck (humanPrt (string->list (readLine)))
-                                             (comp 1)
+                                             (comp (random 3))
                                              scoreCheck)
                                              (- rounds 1))))
               ))
@@ -119,19 +119,19 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; gameCheck(x y score) -> a list of score at the end of a round 
+;; gameCheck(userMove compMove scoreCheck) -> a list of score at the end of a round 
 ;; check to see if it is a win or loss
 ;;
-;; x - an atom of the users input
-;; y - an atom of the computers moce
+;; userMove - an atom of the users input
+;; compMove - an atom of the computers moce
 ;; scoreCheck - a list of score values
 ;;
-(define (gameCheck x y scoreCheck) 
-                  (cond ((equal? x y) (gameCase x y scoreCheck "TIE"))
-                        ((and (equal? x 'ROCK) (equal? y 'SCISSORS) (gameCase x y scoreCheck "Winner is YOU")))
-                        ((and (equal? x 'PAPER) (equal? y 'ROCK) (gameCase x y scoreCheck "Winner is YOU")))
-                        ((and (equal? x 'SCISSORS) (equal? y 'PAPER) (gameCase x y scoreCheck "Winner is YOU")))
-                        (else (gameCase x y scoreCheck "Winner is COMPUTER"))
+(define (gameCheck userMove compMove scoreCheck) 
+                  (cond ((equal? userMove compMove) (gameCase userMove compMove scoreCheck "TIE"))
+                        ((and (equal? userMove 'ROCK) (equal? compMove 'SCISSORS) (gameCase userMove compMove scoreCheck "Winner is YOU")))
+                        ((and (equal? userMove 'PAPER) (equal? compMove 'ROCK) (gameCase userMove compMove scoreCheck "Winner is YOU")))
+                        ((and (equal? userMove 'SCISSORS) (equal? compMove 'PAPER) (gameCase userMove compMove scoreCheck "Winner is YOU")))
+                        (else (gameCase userMove compMove scoreCheck "Winner is COMPUTER"))
                   )
                   )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -153,20 +153,20 @@
                                    (car scoreCheck) (cadr scoreCheck) (+ (caddr scoreCheck) 1)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; gameCase(x y scoreCheck indexState) -> a list of values with a manipulated score
+;; gameCase(userMove compMove scoreCheck indexState) -> a list of values with a manipulated score
 ;; This function displays output message on the outcome of the rounds
 ;; then passes information in order to be incremented.
 ;; 
-;; x - user's input
-;; y - computers move
+;; userMove - user's input
+;; compMove - computers move
 ;; scoreCheck - a list of the previous scores
 ;; indexState - is able to to tell who the winner is.
 ;;
-(define (gameCase x y scoreCheck indexState)
+(define (gameCase userMove compMove scoreCheck indexState)
                                  (display "You entered ")
-                                 (display (upperCase x))
+                                 (display (upperCase userMove))
                                  (display "   Computer chose ")
-                                 (display (upperCase y))
+                                 (display (upperCase compMove))
                                  (display " ")
                                  (display indexState)
                                  (newline)
@@ -205,7 +205,7 @@
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; uperCase(val) -> an uppercase version of an output (as a String)
+;; upperCase(val) -> an uppercase version of an output (as a String)
 ;;
 ;; This function takes the atom of val and returns its value into String
 ;; val - an atom of the move.
